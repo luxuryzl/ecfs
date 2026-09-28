@@ -9,12 +9,15 @@
     // See also https://aka.ms/tsconfig/module
     "module": "nodenext",
     "target": "esnext",
-    "types": [],
+    "types": ["node"],
+
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],
     // and npm install -D @types/node
 
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     // Other Outputs
     "sourceMap": true,
     "declaration": true,
@@ -25,6 +28,7 @@
     "exactOptionalPropertyTypes": true,
 
     // Style Options
+    "noImplicitAny": true,
     // "noImplicitReturns": true,
     // "noImplicitOverride": true,
     // "noUnusedLocals": true,
@@ -41,5 +45,7 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
     "resolveJsonModule": true
-  }
+  },
+  "include": ["src/**/*", "prisma/**/*"],
+  "exclude": ["node_modules", "dist"]
 }
