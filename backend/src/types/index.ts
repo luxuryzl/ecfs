@@ -1,3 +1,5 @@
+import type { PrismaClient } from "../generated/prisma/client.js";
+
 import type {
   User,
   Product,
@@ -25,8 +27,8 @@ declare module "@fastify/jwt" {
 }
 
 declare module "fastify" {
-  interface FastifyRequest {
-    prisma: import("../generated/prisma/client.js").PrismaClient;
+  interface FastifyInstance {
+    prisma: PrismaClient;
   }
 }
 

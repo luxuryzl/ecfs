@@ -6,4 +6,7 @@ export default defineConfig({
   datasource: {
     url: env("DATABASE_URL"),
   },
+  migrations: {
+    seed: "pnpm tsx prisma/seed.ts",
+  },
 });
