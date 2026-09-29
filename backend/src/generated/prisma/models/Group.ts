@@ -42,6 +42,7 @@ export type GroupMinAggregateOutputType = {
   sort: number | null
   status: string | null
   createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type GroupMaxAggregateOutputType = {
@@ -50,6 +51,7 @@ export type GroupMaxAggregateOutputType = {
   sort: number | null
   status: string | null
   createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type GroupCountAggregateOutputType = {
@@ -58,6 +60,7 @@ export type GroupCountAggregateOutputType = {
   sort: number
   status: number
   createdAt: number
+  updatedAt: number
   _all: number
 }
 
@@ -78,6 +81,7 @@ export type GroupMinAggregateInputType = {
   sort?: true
   status?: true
   createdAt?: true
+  updatedAt?: true
 }
 
 export type GroupMaxAggregateInputType = {
@@ -86,6 +90,7 @@ export type GroupMaxAggregateInputType = {
   sort?: true
   status?: true
   createdAt?: true
+  updatedAt?: true
 }
 
 export type GroupCountAggregateInputType = {
@@ -94,6 +99,7 @@ export type GroupCountAggregateInputType = {
   sort?: true
   status?: true
   createdAt?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -189,6 +195,7 @@ export type GroupGroupByOutputType = {
   sort: number
   status: string
   createdAt: Date
+  updatedAt: Date
   _count: GroupCountAggregateOutputType | null
   _avg: GroupAvgAggregateOutputType | null
   _sum: GroupSumAggregateOutputType | null
@@ -220,6 +227,7 @@ export type GroupWhereInput = {
   sort?: Prisma.IntFilter<"Group"> | number
   status?: Prisma.StringFilter<"Group"> | string
   createdAt?: Prisma.DateTimeFilter<"Group"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Group"> | Date | string
   products?: Prisma.ProductListRelationFilter
 }
 
@@ -229,6 +237,7 @@ export type GroupOrderByWithRelationInput = {
   sort?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   products?: Prisma.ProductOrderByRelationAggregateInput
 }
 
@@ -241,6 +250,7 @@ export type GroupWhereUniqueInput = Prisma.AtLeast<{
   sort?: Prisma.IntFilter<"Group"> | number
   status?: Prisma.StringFilter<"Group"> | string
   createdAt?: Prisma.DateTimeFilter<"Group"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Group"> | Date | string
   products?: Prisma.ProductListRelationFilter
 }, "id" | "name">
 
@@ -250,6 +260,7 @@ export type GroupOrderByWithAggregationInput = {
   sort?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.GroupCountOrderByAggregateInput
   _avg?: Prisma.GroupAvgOrderByAggregateInput
   _max?: Prisma.GroupMaxOrderByAggregateInput
@@ -266,6 +277,7 @@ export type GroupScalarWhereWithAggregatesInput = {
   sort?: Prisma.IntWithAggregatesFilter<"Group"> | number
   status?: Prisma.StringWithAggregatesFilter<"Group"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Group"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Group"> | Date | string
 }
 
 export type GroupCreateInput = {
@@ -273,6 +285,7 @@ export type GroupCreateInput = {
   sort?: number
   status?: string
   createdAt?: Date | string
+  updatedAt?: Date | string
   products?: Prisma.ProductCreateNestedManyWithoutGroupInput
 }
 
@@ -282,6 +295,7 @@ export type GroupUncheckedCreateInput = {
   sort?: number
   status?: string
   createdAt?: Date | string
+  updatedAt?: Date | string
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutGroupInput
 }
 
@@ -290,6 +304,7 @@ export type GroupUpdateInput = {
   sort?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   products?: Prisma.ProductUpdateManyWithoutGroupNestedInput
 }
 
@@ -299,6 +314,7 @@ export type GroupUncheckedUpdateInput = {
   sort?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   products?: Prisma.ProductUncheckedUpdateManyWithoutGroupNestedInput
 }
 
@@ -308,6 +324,7 @@ export type GroupCreateManyInput = {
   sort?: number
   status?: string
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type GroupUpdateManyMutationInput = {
@@ -315,6 +332,7 @@ export type GroupUpdateManyMutationInput = {
   sort?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type GroupUncheckedUpdateManyInput = {
@@ -323,6 +341,7 @@ export type GroupUncheckedUpdateManyInput = {
   sort?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type GroupCountOrderByAggregateInput = {
@@ -331,6 +350,7 @@ export type GroupCountOrderByAggregateInput = {
   sort?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type GroupAvgOrderByAggregateInput = {
@@ -344,6 +364,7 @@ export type GroupMaxOrderByAggregateInput = {
   sort?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type GroupMinOrderByAggregateInput = {
@@ -352,6 +373,7 @@ export type GroupMinOrderByAggregateInput = {
   sort?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type GroupSumOrderByAggregateInput = {
@@ -385,6 +407,7 @@ export type GroupCreateWithoutProductsInput = {
   sort?: number
   status?: string
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type GroupUncheckedCreateWithoutProductsInput = {
@@ -393,6 +416,7 @@ export type GroupUncheckedCreateWithoutProductsInput = {
   sort?: number
   status?: string
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type GroupCreateOrConnectWithoutProductsInput = {
@@ -416,6 +440,7 @@ export type GroupUpdateWithoutProductsInput = {
   sort?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type GroupUncheckedUpdateWithoutProductsInput = {
@@ -424,6 +449,7 @@ export type GroupUncheckedUpdateWithoutProductsInput = {
   sort?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -463,6 +489,7 @@ export type GroupSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   sort?: boolean
   status?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
   products?: boolean | Prisma.Group$productsArgs<ExtArgs>
   _count?: boolean | Prisma.GroupCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["group"]>
@@ -473,6 +500,7 @@ export type GroupSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   sort?: boolean
   status?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
 }, ExtArgs["result"]["group"]>
 
 export type GroupSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -481,6 +509,7 @@ export type GroupSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   sort?: boolean
   status?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
 }, ExtArgs["result"]["group"]>
 
 export type GroupSelectScalar = {
@@ -489,9 +518,10 @@ export type GroupSelectScalar = {
   sort?: boolean
   status?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
 }
 
-export type GroupOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "sort" | "status" | "createdAt", ExtArgs["result"]["group"]>
+export type GroupOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "sort" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["group"]>
 export type GroupInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   products?: boolean | Prisma.Group$productsArgs<ExtArgs>
   _count?: boolean | Prisma.GroupCountOutputTypeDefaultArgs<ExtArgs>
@@ -510,6 +540,7 @@ export type $GroupPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     sort: number
     status: string
     createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["group"]>
   composites: {}
 }
@@ -939,6 +970,7 @@ export interface GroupFieldRefs {
   readonly sort: Prisma.FieldRef<"Group", 'Int'>
   readonly status: Prisma.FieldRef<"Group", 'String'>
   readonly createdAt: Prisma.FieldRef<"Group", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"Group", 'DateTime'>
 }
     
 

@@ -76,3 +76,8 @@ export type Withdraw = Prisma.WithdrawModel
  * 
  */
 export type Notice = Prisma.NoticeModel
+/**
+ * Model OperationLog
+ * 
+ */
+export type OperationLog = Prisma.OperationLogModel

@@ -7,6 +7,7 @@ datasource db {
   provider = "sqlite"
 }
 
+// ============ 用户 ============
 model User {
   id           Int      @id @default(autoincrement())
   username     String   @unique
@@ -22,17 +23,25 @@ model User {
   orders       Order[]
   recharges    Recharge[]
   withdraws    Withdraw[]
+  operations   OperationLog[]
+
+  @@index([role])
+  @@index([status])
 }
 
+// ============ 商品分组 ========
 model Group {
   id        Int      @id @default(autoincrement())
   name      String   @unique
   sort      Int      @default(0)
-  status    String   @default("ACTIVE")
+  status    String   @default("ACTIVE")  //ACTIVE | DISABLED
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   products  Product[]
 }
 
+// ============ 商品 ============
 model Product {
   id          Int      @id @default(autoincrement())
   name        String
@@ -42,54 +51,110 @@ model Product {
   image       String?
   status      String   @default("ON") // ON | OFF
   groupId     Int?
-  group       Group?   @relation(fields: [groupId], references: [id])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+// 这里的 group，它‌不会‌在数据库表中生成名为 group 的列
+  group       Group?   @relation(fields: [groupId], references: [id], onDelete: SetNull)
   orders      Order[]
+
+  @@index([groupId])
+  @@index([status])
 }
 
+// ============ 订单 ============
 model Order {
   id         Int      @id @default(autoincrement())
   orderNo    String   @unique
+  parentId   Int?     //指向主订单,补差/退款单使用
+  type       String   @default("NORMAL")  //NORMAL | SUPPLEMENT 补充 | REFUND 退款
   userId     Int
-  user       User     @relation(fields: [userId], references: [id])
   productId  Int
-  product    Product  @relation(fields: [productId], references: [id])
-  quantity   Int      @default(1)
-  amount     Float
+  quantity   Int      @default(1)  //数量，默认1
+  amount     Float    //金额
   status     String   @default("PENDING") // PENDING | PAID | CANCELLED | DONE
-  remark     String?
+  remark     String?  //备注
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+
+  user       User     @relation(fields: [userId], references: [id])
+  product    Product  @relation(fields: [productId], references: [id])
+
+  // 自主关联：主订单+子订单
+  parent     Order?   @relation("OrderRelation", fields: [parentId], references: [id])
+  children   Order[]  @relation("OrderRelation")
+
+  @@index([userId])
+  @@index([productId])
+  @@index([parentId])
+  @@index([status])
+  @@index([type])
+  @@index([createdAt])
 }
 
+// ============ 充值申请 ============
 model Recharge {
   id        Int      @id @default(autoincrement())
   userId    Int
-  user      User     @relation(fields: [userId], references: [id])
   amount    Float
   status    String   @default("PENDING") // PENDING | APPROVED | REJECTED
   remark    String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id])
+  
+  @@index([userId])
+  @@index([status])
 }
 
+// ============ 提现申请 ============
 model Withdraw {
   id        Int      @id @default(autoincrement())
   userId    Int
-  user      User     @relation(fields: [userId], references: [id])
   amount    Float
-  account   String
+  account   String   //account 是用户提现时填的收款账户信息——也就是「钱要打到哪里」
+  channel    String   @default("BANK")   // BANK | ALIPAY | WECHAT
+  accountNo  String?                     // 卡号/账号
+  accountName String?                    // 户名
+  bankName   String?                     // 开户行
   status    String   @default("PENDING") // PENDING | APPROVED | REJECTED
   remark    String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id])
+  
+  @@index([userId])
+  @@index([status])
 }
 
+// ============ 公告 ============
 model Notice {
   id        Int      @id @default(autoincrement())
   title     String
   content   String
-  status    String   @default("PUBLISHED")
+  status    String   @default("PUBLISHED")  // DRAFT | PUBLISHED | ARCHIVED
   createdAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+
+  @@index([status])
+}
+
+
+// ============ 操作日志 ============
+model OperationLog {
+  id         Int      @id @default(autoincrement())
+  operatorId Int
+  action     String   // APPROVE_RECHARGE / DELETE_PRODUCT / ...
+  targetType String   // User / Product / Order / ...
+  targetId   Int?
+  detail     String?  // JSON 字符串
+  createdAt  DateTime @default(now())
+
+  operator User @relation(fields: [operatorId], references: [id])
+
+  @@index([operatorId])
+  @@index([action])
+  @@index([createdAt])
 }

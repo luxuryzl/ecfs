@@ -403,7 +403,8 @@ export const ModelName = {
   Order: 'Order',
   Recharge: 'Recharge',
   Withdraw: 'Withdraw',
-  Notice: 'Notice'
+  Notice: 'Notice',
+  OperationLog: 'OperationLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -419,7 +420,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "group" | "product" | "order" | "recharge" | "withdraw" | "notice"
+    modelProps: "user" | "group" | "product" | "order" | "recharge" | "withdraw" | "notice" | "operationLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -941,6 +942,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    OperationLog: {
+      payload: Prisma.$OperationLogPayload<ExtArgs>
+      fields: Prisma.OperationLogFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OperationLogFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationLogPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OperationLogFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationLogPayload>
+        }
+        findFirst: {
+          args: Prisma.OperationLogFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationLogPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OperationLogFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationLogPayload>
+        }
+        findMany: {
+          args: Prisma.OperationLogFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationLogPayload>[]
+        }
+        create: {
+          args: Prisma.OperationLogCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationLogPayload>
+        }
+        createMany: {
+          args: Prisma.OperationLogCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OperationLogCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationLogPayload>[]
+        }
+        delete: {
+          args: Prisma.OperationLogDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationLogPayload>
+        }
+        update: {
+          args: Prisma.OperationLogUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationLogPayload>
+        }
+        deleteMany: {
+          args: Prisma.OperationLogDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OperationLogUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OperationLogUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationLogPayload>[]
+        }
+        upsert: {
+          args: Prisma.OperationLogUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationLogPayload>
+        }
+        aggregate: {
+          args: Prisma.OperationLogAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOperationLog>
+        }
+        groupBy: {
+          args: Prisma.OperationLogGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OperationLogGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OperationLogCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OperationLogCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -998,7 +1073,8 @@ export const GroupScalarFieldEnum = {
   name: 'name',
   sort: 'sort',
   status: 'status',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type GroupScalarFieldEnum = (typeof GroupScalarFieldEnum)[keyof typeof GroupScalarFieldEnum]
@@ -1023,6 +1099,8 @@ export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeo
 export const OrderScalarFieldEnum = {
   id: 'id',
   orderNo: 'orderNo',
+  parentId: 'parentId',
+  type: 'type',
   userId: 'userId',
   productId: 'productId',
   quantity: 'quantity',
@@ -1054,6 +1132,10 @@ export const WithdrawScalarFieldEnum = {
   userId: 'userId',
   amount: 'amount',
   account: 'account',
+  channel: 'channel',
+  accountNo: 'accountNo',
+  accountName: 'accountName',
+  bankName: 'bankName',
   status: 'status',
   remark: 'remark',
   createdAt: 'createdAt',
@@ -1068,10 +1150,24 @@ export const NoticeScalarFieldEnum = {
   title: 'title',
   content: 'content',
   status: 'status',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  updateAt: 'updateAt'
 } as const
 
 export type NoticeScalarFieldEnum = (typeof NoticeScalarFieldEnum)[keyof typeof NoticeScalarFieldEnum]
+
+
+export const OperationLogScalarFieldEnum = {
+  id: 'id',
+  operatorId: 'operatorId',
+  action: 'action',
+  targetType: 'targetType',
+  targetId: 'targetId',
+  detail: 'detail',
+  createdAt: 'createdAt'
+} as const
+
+export type OperationLogScalarFieldEnum = (typeof OperationLogScalarFieldEnum)[keyof typeof OperationLogScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1281,6 +1377,7 @@ export type GlobalOmitConfig = {
   recharge?: Prisma.RechargeOmit
   withdraw?: Prisma.WithdrawOmit
   notice?: Prisma.NoticeOmit
+  operationLog?: Prisma.OperationLogOmit
 }
 
 /* Types for Logging */

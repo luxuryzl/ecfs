@@ -57,7 +57,8 @@ export const ModelName = {
   Order: 'Order',
   Recharge: 'Recharge',
   Withdraw: 'Withdraw',
-  Notice: 'Notice'
+  Notice: 'Notice',
+  OperationLog: 'OperationLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -94,7 +95,8 @@ export const GroupScalarFieldEnum = {
   name: 'name',
   sort: 'sort',
   status: 'status',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type GroupScalarFieldEnum = (typeof GroupScalarFieldEnum)[keyof typeof GroupScalarFieldEnum]
@@ -119,6 +121,8 @@ export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeo
 export const OrderScalarFieldEnum = {
   id: 'id',
   orderNo: 'orderNo',
+  parentId: 'parentId',
+  type: 'type',
   userId: 'userId',
   productId: 'productId',
   quantity: 'quantity',
@@ -150,6 +154,10 @@ export const WithdrawScalarFieldEnum = {
   userId: 'userId',
   amount: 'amount',
   account: 'account',
+  channel: 'channel',
+  accountNo: 'accountNo',
+  accountName: 'accountName',
+  bankName: 'bankName',
   status: 'status',
   remark: 'remark',
   createdAt: 'createdAt',
@@ -164,10 +172,24 @@ export const NoticeScalarFieldEnum = {
   title: 'title',
   content: 'content',
   status: 'status',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  updateAt: 'updateAt'
 } as const
 
 export type NoticeScalarFieldEnum = (typeof NoticeScalarFieldEnum)[keyof typeof NoticeScalarFieldEnum]
+
+
+export const OperationLogScalarFieldEnum = {
+  id: 'id',
+  operatorId: 'operatorId',
+  action: 'action',
+  targetType: 'targetType',
+  targetId: 'targetId',
+  detail: 'detail',
+  createdAt: 'createdAt'
+} as const
+
+export type OperationLogScalarFieldEnum = (typeof OperationLogScalarFieldEnum)[keyof typeof OperationLogScalarFieldEnum]
 
 
 export const SortOrder = {
