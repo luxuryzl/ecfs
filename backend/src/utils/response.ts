@@ -1,10 +1,9 @@
-// 统一响应格式，约定：
-
-// 成功
-// {success: true, data: ...}
-
-// 失败
-// {success: false, message: '...', code: '...'}
+/**
+ * 统一响应格式，风格统一，前端处理更省心，约定：
+ * 成功 {success: true, data: ...}
+ * 失败{success: false, message: '...', code: '...'}
+ *
+ */
 
 import type { FastifyReply } from "fastify";
 

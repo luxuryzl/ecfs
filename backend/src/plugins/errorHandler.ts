@@ -1,12 +1,16 @@
+/**
+ * Fastify 插件，统一处理所有抛出的错误。
+ */
+import fp from "fastify-plugin";
 import type { FastifyInstance, FastifyError } from "fastify";
 import { ZodError } from "zod";
 import { AppError } from "../utils/errors.js";
 
-export async function errorHandlerPlugin(app: FastifyInstance) {
+export default fp(async function errorHandlerPlugin(app: FastifyInstance) {
   app.setErrorHandler(
     (error: FastifyError | AppError | ZodError, request, reply) => {
+      // 处理 Zod 验证错误
       if (error instanceof ZodError) {
-        // 处理 Zod 验证错误
         const first = error.issues[0];
         return reply.status(400).send({
           success: false,
@@ -53,4 +57,4 @@ export async function errorHandlerPlugin(app: FastifyInstance) {
       code: "ROUTE NOT_FOUND",
     });
   });
-}
+});
