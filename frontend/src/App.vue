@@ -1,49 +1,39 @@
 <template>
-  <el-config-provider :locale="elementLocale">
-    <div class="container">
-      <el-select v-model="locale" class="language-select" aria-label="Language">
-        <el-option label="简体中文" value="zh-CN" />
-        <el-option label="English" value="en-US" />
-      </el-select>
-      <h1>
-        <el-icon><HomeFilled /></el-icon>{{ t("appTitle") }}
-      </h1>
-      <p>{{ t("startupStatus") }}</p>
-      <el-button type="primary">{{ t("elementPlusStatus") }}</el-button>
+  <div class="app">
+    <h1>电商财税服务平台</h1>
+    <p>前端脚手架已就绪（阶段6）</p>
+    <el-button type="primary" @click="checkBackend">测试后端连通性</el-button>
+    <div v-if="health" class="result">
+      <p>后端状态：{{ health.status }}</p>
+      <p>环境：{{ health.env }}</p>
+      <p>时间：{{ health.time }}</p>
     </div>
-    <router-view></router-view>
-  </el-config-provider>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { computed, watch } from "vue";
-import en from "element-plus/es/locale/lang/en";
-import zhCn from "element-plus/es/locale/lang/zh-cn";
-import { locale, t } from "./i18n";
+import { ref } from 'vue';
+import { ElMessage } from 'element-plus';
 
-const elementLocale = computed(() => (locale.value === "en-US" ? en : zhCn));
+import request from './api/request';
 
-watch(
-  locale,
-  (value) => {
-    document.documentElement.lang = value;
-    document.title = t("appTitle");
-  },
-  { immediate: true },
-);
+interface HealthData {
+  status: string;
+  time: string;
+  env: string;
+}
+
+const health = ref<HealthData | null>(null);
+
+async function checkBackend() {
+  try {
+    const res = await request.get<unknown, {success:boolean; data:HealthData}>("/health");
+    health.value = res.data;
+    ElMessage.success("后端连接成功")
+  }catch{
+    ElMessage.error("后端连接失败");
+  }
+}
 </script>
 
-<style scoped>
-.container {
-  position: relative;
-  padding: 40px;
-  font-family: sans-serif;
-}
-
-.language-select {
-  position: absolute;
-  top: 24px;
-  right: 24px;
-  width: 150px;
-}
-</style>
+<style scoped></style>
