@@ -17,6 +17,10 @@ import { authRoutes } from "./routes/auth.js";
 
 import { randomUUID } from "crypto";
 
+import { ok } from "./utils/response.js";
+import { authHook, adminHook } from "./utils/auth.js";
+import { logOperation } from "./utils/operationLog.js";
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const adapter = new PrismaBetterSqlite3({
