@@ -11,17 +11,16 @@
       <p>{{ t("startupStatus") }}</p>
       <el-button type="primary">{{ t("elementPlusStatus") }}</el-button>
     </div>
+    <router-view></router-view>
   </el-config-provider>
-  <router-view></router-view>
 </template>
 
 <script setup lang="ts">
 import { computed, watch } from "vue";
-import { useI18n } from "vue-i18n";
 import en from "element-plus/es/locale/lang/en";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
+import { locale, t } from "./i18n";
 
-const { t, locale } = useI18n();
 const elementLocale = computed(() => (locale.value === "en-US" ? en : zhCn));
 
 watch(

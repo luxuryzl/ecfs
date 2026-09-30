@@ -13,7 +13,7 @@ import errorHandlerPlugin from "./plugins/errorHandler.js";
 import requestContextPlugin from "./plugins/requestContext.js";
 import "./types/index.js";
 
-import authRoutes from "./routes/auth.js";
+import { authRoutes } from "./routes/auth.js";
 
 import { randomUUID } from "crypto";
 
@@ -82,7 +82,7 @@ export async function buildApp(): Promise<FastifyInstance> {
   }));
 
   // 注册路由，后续阶段逐步添加
-  // await app.register(authRoutes, { prefix: "/api/auth" });
+  await app.register(authRoutes, { prefix: "/api/auth" });
 
   return app;
 }

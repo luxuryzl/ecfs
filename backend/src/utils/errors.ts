@@ -16,16 +16,22 @@ export class AppError extends Error {
   }
 }
 
+// 未授权类错误
+export class UnauthorizedError extends AppError {
+  constructor(message = "未登录或登录已过期") {
+    super(401, message, "UNAUTHORIZED");
+  }
+}
 // 阻止类错误
 export class ForbiddenError extends AppError {
-  constructor(message: "无权限访问") {
+  constructor(message = "无权限访问") {
     super(403, message, "FORBIDDEN");
   }
 }
 
 // 未找到类错误
 export class NotFoundError extends AppError {
-  constructor(message: "资源不存在") {
+  constructor(message = "资源不存在") {
     super(404, message, "NOT_FOUND");
   }
 }

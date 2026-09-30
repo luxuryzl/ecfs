@@ -1,4 +1,4 @@
-import { createI18n } from "vue-i18n";
+import { ref } from "vue";
 
 const messages = {
   "zh-CN": {
@@ -13,9 +13,11 @@ const messages = {
   },
 };
 
-export const i18n = createI18n({
-  legacy: false,
-  locale: "zh-CN",
-  fallbackLocale: "en-US",
-  messages,
-});
+type Locale = keyof typeof messages;
+type MessageKey = keyof (typeof messages)["zh-CN"];
+
+export const locale = ref<Locale>("zh-CN");
+
+export function t(key: MessageKey): string {
+  return messages[locale.value][key] ?? messages["en-US"][key];
+}
