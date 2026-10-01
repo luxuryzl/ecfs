@@ -4,7 +4,7 @@ interface LogOptions {
   operatorId: number;
   action: string;
   targetType: string;
-  targetIt?: number;
+  targetId?: number;
   detail?: Record<string, unknown>;
 }
 

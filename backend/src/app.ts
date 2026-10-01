@@ -17,9 +17,7 @@ import { authRoutes } from "./routes/auth.js";
 
 import { randomUUID } from "crypto";
 
-import { ok } from "./utils/response.js";
-import { authHook, adminHook } from "./utils/auth.js";
-import { logOperation } from "./utils/operationLog.js";
+import { groupRoutes } from "./routes/groups.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -87,6 +85,8 @@ export async function buildApp(): Promise<FastifyInstance> {
 
   // 注册路由，后续阶段逐步添加
   await app.register(authRoutes, { prefix: "/api/auth" });
+  // 注册分组路由
+  await app.register(groupRoutes, { prefix: "/api/groups" });
 
   return app;
 }
