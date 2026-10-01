@@ -123,7 +123,7 @@ async function onSubmit() {
       router.push(redirect);
     } else {
       console.log("是否为admin", userStore.isAdmin);
-      router.push(userStore.isAdmin ? "/admin" : "/");
+      router.push(userStore.isAdmin ? "/admin/dashboard" : "/");
     }
   } catch {
     // 错误已在拦截器里提示

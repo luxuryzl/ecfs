@@ -1,3 +1,5 @@
+// api内的文件，只负责HTTP请求，一个模块一个文件
+// axios实例+拦截器+解包。
 import axios, {
   type AxiosInstance,
   type AxiosResponse,

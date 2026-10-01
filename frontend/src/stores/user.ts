@@ -1,6 +1,7 @@
 // Pinia store管用户状态：token、用户信息、登录/登出动作
+// store不再调用request，改用api/auth.ts的函数，避免循环依赖
 import { defineStore } from "pinia";
-import { request } from "@/api/request";
+import * as authApi from "@/api/auth";
 import type { LoginPayload, LoginResponse, UserInfo } from "@/types";
 
 interface UserState {
@@ -30,11 +31,13 @@ export const useUserStore = defineStore("user", {
     // 供路由守卫用
     isLogin: (state): boolean => !!state.token,
     isAdmin: (state): boolean => state.user?.role === "ADMIN",
+    displayName: (state): string =>
+      state.user?.nickname ?? state.user?.username ?? "未登录",
   },
 
   actions: {
     async login(payload: LoginPayload): Promise<void> {
-      const res = await request.post<LoginResponse>("/auth/login", payload);
+      const res = await authApi.login(payload);
 
       this.token = res.token;
       this.user = res.user;
@@ -44,11 +47,10 @@ export const useUserStore = defineStore("user", {
     },
 
     async fetchMe(): Promise<void> {
-      const user = await request.get<UserInfo>("/auth/me");
+      const user = await authApi.fetchMe();
       this.user = user;
-      if (user) {
-        localStorage.setItem("user", JSON.stringify(user));
-      }
+
+      localStorage.setItem("user", JSON.stringify(user));
     },
 
     logout(): void {
