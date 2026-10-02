@@ -22,8 +22,8 @@ export interface Paginated<T> {
 
 export interface PageParams {
   page?: number;
-  PageSize?: number;
-  Keyword?: string;
+  pageSize?: number;
+  keyword?: string;
 }
 
 // 2.======认证 & 用户相关======

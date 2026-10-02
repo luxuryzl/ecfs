@@ -16,6 +16,8 @@ const createSchema = z.object({
 });
 
 const updateSchema = createSchema.partial();
+// 分组数量一般很少（几个到几十个），不需要分页、不需要搜索、不需要筛选，一次全返回
+// 所以这儿不需要写listQuerySchema
 
 // 路由
 export async function groupRoutes(app: FastifyInstance) {
@@ -63,7 +65,7 @@ export async function groupRoutes(app: FastifyInstance) {
     });
 
     await logOperation(app, {
-      operatorId: request.user!.id,
+      operatorId: request.user.id,
       action: "CREATE_GROUP",
       targetType: "GROUP",
       targetId: group.id,
@@ -102,7 +104,7 @@ export async function groupRoutes(app: FastifyInstance) {
     });
 
     await logOperation(app, {
-      operatorId: request.user!.id,
+      operatorId: request.user.id,
       action: "UPDATE_GROUP",
       targetType: "GROUP",
       targetId: group.id,
@@ -136,7 +138,7 @@ export async function groupRoutes(app: FastifyInstance) {
     });
 
     await logOperation(app, {
-      operatorId: request.user!.id,
+      operatorId: request.user.id,
       action: "DELETE_GROUP",
       targetType: "GROUP",
       targetId: id,
