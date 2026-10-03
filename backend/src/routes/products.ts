@@ -13,8 +13,12 @@ const createSchema = z.object({
     .min(1, "商品名称不能为空")
     .max(50, "商品名称不能超过50个字符"),
   description: z.string().max(500, "商品描述不能超过500个字符").optional(),
-  price: z.number().positive(),
-  stock: z.number().int().min(0, "库存不能为负数"),
+  price: z.number().positive().min(1).max(999999999, "价格不能超过999999999"),
+  stock: z
+    .number()
+    .int()
+    .min(0, "库存不能为负数")
+    .max(999999999, "库存不能超过999999999"),
   image: z.string().max(500).optional(),
   groupId: z.number().int().positive().nullable().optional(),
   status: z.enum(["ON", "OFF"]).optional(),

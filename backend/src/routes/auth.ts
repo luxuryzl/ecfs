@@ -66,6 +66,15 @@ export async function authRoutes(app: FastifyInstance) {
 
     const user = await app.prisma.user.findUnique({
       where: { username: data.username },
+      select: {
+        id: true,
+        username: true,
+        password: true,
+        role: true,
+        status: true,
+        balance: true,
+        nickname: true,
+      },
     });
     if (!user)
       throw new AppError(400, "用户名或密码错误", "INVALID_CREDENTIALS");

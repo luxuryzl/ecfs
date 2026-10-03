@@ -272,8 +272,8 @@ const rules: FormRules<ProductPayload> = {
     { required: true, message: "请输入价格", trigger: "blur" },
     {
       validator: (_rule, value: number, callback) => {
-        if (value <= 0) {
-          callback(new Error("价格必须大于 0"));
+        if (value <= 0 || value > 999999999) {
+          callback(new Error("价格必须大于 0，小于999999999"));
         } else {
           callback();
         }
@@ -285,8 +285,8 @@ const rules: FormRules<ProductPayload> = {
     { required: true, message: "请输入库存", trigger: "blur" },
     {
       validator: (_rule, value: number, callback) => {
-        if (value < 0) {
-          callback(new Error("库存必须大于等于 0"));
+        if (value < 0 || value > 999999999) {
+          callback(new Error("库存必须大于等于 0，小于999999999"));
         } else {
           callback();
         }

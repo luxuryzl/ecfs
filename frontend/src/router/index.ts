@@ -8,7 +8,6 @@ import {
   type RouteRecordRaw,
 } from "vue-router";
 import { useUserStore } from "@/stores/user";
-import Home from "@/views/user/Home.vue";
 
 const routes: RouteRecordRaw[] = [
   // 1.======认证相关======

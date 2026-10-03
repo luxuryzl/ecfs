@@ -74,7 +74,7 @@
           v-model:current-page="query.page"
           v-model:page-size="query.pageSize"
           :total="total"
-          :page-sizes="[8, 16, 24]"
+          :page-sizes="[10, 20, 30]"
           layout="total, sizes, prev, pager, next"
           @size-change="loadProducts"
           @current-change="loadProducts"
@@ -135,7 +135,7 @@ const selectedGroupId = ref<number | undefined>(undefined);
 
 const query = reactive({
   page: 1,
-  pageSize: 8,
+  pageSize: 10,
 });
 
 const buyDialogVisible = ref(false);

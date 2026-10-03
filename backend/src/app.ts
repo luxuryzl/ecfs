@@ -19,6 +19,7 @@ import { randomUUID } from "crypto";
 
 import { groupRoutes } from "./routes/groups.js";
 import { productsRoutes } from "./routes/products.js";
+import { orderRoutes } from "./routes/order.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -27,7 +28,12 @@ const adapter = new PrismaBetterSqlite3({
 });
 
 // 生成一个prisma客户端实例，使用Better SQLite3适配器
-export const prisma = new PrismaClient({ adapter });
+export const prisma = new PrismaClient({
+  adapter,
+  omit: {
+    user: { password: true }, // 全局排除password
+  },
+});
 
 // 生成一个Fastify应用实例
 export async function buildApp(): Promise<FastifyInstance> {
@@ -71,7 +77,7 @@ export async function buildApp(): Promise<FastifyInstance> {
   });
 
   // 将prisma客户端实例挂载到Fastify应用实例上，以便在请求处理过程中使用
-  app.decorate("prisma", prisma);
+  app.decorate("prisma", prisma as any);
 
   // 创建检查
   // 给外部系统（负载均衡器、监控平台、容器编排器）判断“这个服务是否还活着”用的信号。返回值本身对人没用，但对机器很关键
@@ -90,5 +96,7 @@ export async function buildApp(): Promise<FastifyInstance> {
   await app.register(groupRoutes, { prefix: "/api/groups" });
   //注册商品路由
   await app.register(productsRoutes, { prefix: "/api/products" });
+  // 注册订单路由
+  await app.register(orderRoutes, { prefix: "/api/orders" });
   return app;
 }
