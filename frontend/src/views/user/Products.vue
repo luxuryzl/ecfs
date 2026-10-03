@@ -125,7 +125,9 @@ import { ref, reactive, onMounted } from "vue";
 import { ElMessage } from "element-plus";
 import * as productApi from "@/api/product";
 import * as groupApi from "@/api/group";
+import * as orderApi from "@/api/order";
 import type { Product, Group } from "@/types/index";
+import { useUserStore } from "@/stores/user";
 
 const loading = ref(true);
 const products = ref<Product[]>([]);
@@ -174,14 +176,23 @@ function handleBuy(product: Product) {
   buyDialogVisible.value = true;
 }
 
+// 用户下单成功后，自动刷新余额
+const userStore = useUserStore();
 async function confirmBuy() {
   if (!selectedProduct.value) return;
 
   buying.value = true;
   try {
-    // 阶段11会真实实现下单接口
-    ElMessage.info("下单接口将在阶段11实现");
+    await orderApi.createOrder({
+      productId: selectedProduct.value.id,
+      quantity: buyQuantity.value,
+    });
+    ElMessage.success("下单成功");
     buyDialogVisible.value = false;
+
+    await Promise.all([loadProducts(), userStore.fetchMe()]);
+  } catch {
+    // 错误已在拦截器里提示
   } finally {
     buying.value = false;
   }

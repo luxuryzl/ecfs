@@ -197,7 +197,7 @@ export async function orderRoutes(app: FastifyInstance) {
       if (!exist) throw new NotFoundError("订单不存在");
 
       // 订单流转校验：已取消和已完成的不能修改状态
-      if (exist.status === "CANCELED" || exist.status === "DONE") {
+      if (exist.status === "CANCELLED" || exist.status === "DONE") {
         throw new AppError(
           400,
           "订单已处于「${exist.status}」状态，不能进行状态修改",
@@ -247,7 +247,7 @@ export async function orderRoutes(app: FastifyInstance) {
       if (mainOrder.type !== "NORMAL") {
         throw new AppError(400, "只能对普通订单创建补差单", "NOT_NORMAL_ORDER");
       }
-      if (mainOrder.status === "CANCELED") {
+      if (mainOrder.status === "CANCELLED") {
         throw new AppError(
           400,
           "已取消的订单不能创建补差单",
@@ -333,7 +333,7 @@ export async function orderRoutes(app: FastifyInstance) {
     }
 
     // 事务：退余额 + 退库存 + 改状态
-    const canceled = await app.prisma.$transaction(async (tx) => {
+    const cancelled = await app.prisma.$transaction(async (tx) => {
       await tx.user.update({
         where: { id: order.userId },
         data: { balance: { increment: order.amount } },
@@ -346,10 +346,10 @@ export async function orderRoutes(app: FastifyInstance) {
 
       return tx.order.update({
         where: { id },
-        data: { status: "CANCELED", remark: "用户取消" },
+        data: { status: "CANCELLED", remark: "用户取消" },
       });
     });
 
-    return ok(reply, canceled);
+    return ok(reply, cancelled);
   });
 }

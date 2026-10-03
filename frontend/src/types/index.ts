@@ -38,7 +38,7 @@ export interface UserInfo {
   role: Role;
   balance: number;
   status?: UserStatus;
-  createAt?: string;
+  createdAt?: string;
 }
 
 export interface LoginPayload {
@@ -64,8 +64,8 @@ export interface Group {
   name: string;
   sort: number;
   status: "ACTIVE" | "DISABLED";
-  createAt?: string;
-  updateAt?: string;
+  createdAt?: string;
+  updatedAt?: string;
   _count?: {
     products: number;
   };
@@ -90,8 +90,8 @@ export interface Product {
   status: ProductStatus;
   groupId?: number | null;
   group?: Group | null;
-  createAt?: string;
-  updateAt?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface ProductPayload {
@@ -119,8 +119,8 @@ export interface Order {
   amount: number; // 总金额
   status: OrderStatus;
   remark?: string | null; // 订单备注
-  createAt?: string;
-  updateAt?: string;
+  createdAt?: string;
+  updatedAt?: string;
   user?: UserInfo;
   product?: Product;
   parent?: Order | null;
@@ -142,8 +142,8 @@ export interface Recharge {
   amount: number;
   status: RechargeStatus;
   remark?: string | null; // 审核备注
-  createAt?: string;
-  updateAt?: string;
+  createdAt?: string;
+  updatedAt?: string;
   user?: UserInfo;
 }
 
@@ -162,8 +162,8 @@ export interface Withdrawal {
   bankName: string | null; // 提现银行名称
   status: WithdrawStatus;
   remark?: string | null; // 审核备注
-  createAt?: string;
-  updateAt?: string;
+  createdAt?: string;
+  updatedAt?: string;
   user?: UserInfo;
 }
 
@@ -184,8 +184,8 @@ export interface Notice {
   title: string;
   content: string;
   status: NoticeStatus;
-  createAt?: string;
-  updateAt?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 // 9.======操作日志相关======
@@ -196,7 +196,7 @@ export interface OperationLog {
   targetType: string;
   targetId: number | null;
   detail?: string | null;
-  createAt?: string;
+  createdAt?: string;
   operator?: UserInfo;
 }
 
