@@ -20,6 +20,7 @@ import { randomUUID } from "crypto";
 import { groupRoutes } from "./routes/groups.js";
 import { productsRoutes } from "./routes/products.js";
 import { orderRoutes } from "./routes/order.js";
+import { rechargeRoutes } from "./routes/recharges.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -98,5 +99,7 @@ export async function buildApp(): Promise<FastifyInstance> {
   await app.register(productsRoutes, { prefix: "/api/products" });
   // 注册订单路由
   await app.register(orderRoutes, { prefix: "/api/orders" });
+  // 注册充值路由
+  await app.register(rechargeRoutes, { prefix: "/api/recharges" });
   return app;
 }
