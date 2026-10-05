@@ -151,11 +151,11 @@ export interface Recharge {
 export type WithdrawChannel = "ALIPAY" | "BANK" | "WECHAT" | "OTHER"; // 支付宝，银行卡,微信，其他
 export type WithdrawStatus = "PENDING" | "APPROVED" | "REJECTED"; // 待审核，已通过，已拒绝
 
-export interface Withdrawal {
+export interface Withdraw {
   id: number;
   userId: number;
   amount: number; // 提现金额
-  Account: string; // 提现账号
+  account: string; // 提现账号
   channel: WithdrawChannel;
   accountNo: string | null; // 提现账号
   accountName: string | null; // 提现账号名称

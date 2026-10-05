@@ -21,6 +21,7 @@ import { groupRoutes } from "./routes/groups.js";
 import { productsRoutes } from "./routes/products.js";
 import { orderRoutes } from "./routes/order.js";
 import { rechargeRoutes } from "./routes/recharges.js";
+import { withdrawRoutes } from "./routes/withdraw.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -101,5 +102,7 @@ export async function buildApp(): Promise<FastifyInstance> {
   await app.register(orderRoutes, { prefix: "/api/orders" });
   // 注册充值路由
   await app.register(rechargeRoutes, { prefix: "/api/recharges" });
+  // 注册提现路由
+  await app.register(withdrawRoutes, { prefix: "/api/withdraws" });
   return app;
 }
