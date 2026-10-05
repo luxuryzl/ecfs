@@ -1,5 +1,5 @@
 import type { FastifyInstance } from "fastify";
-import z, { success } from "zod";
+import z from "zod";
 import { adminHook, authHook } from "../utils/auth.js";
 import { ok } from "../utils/response.js";
 import { AppError, NotFoundError } from "../utils/errors.js";
