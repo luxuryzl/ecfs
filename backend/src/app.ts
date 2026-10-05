@@ -23,6 +23,7 @@ import { orderRoutes } from "./routes/order.js";
 import { rechargeRoutes } from "./routes/recharges.js";
 import { withdrawRoutes } from "./routes/withdraw.js";
 import { userRoutes } from "./routes/users.js";
+import { noticeRoutes } from "./routes/notices.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -107,5 +108,7 @@ export async function buildApp(): Promise<FastifyInstance> {
   await app.register(withdrawRoutes, { prefix: "/api/withdraws" });
   // 注册用户路由
   await app.register(userRoutes, { prefix: "/api/users" });
+  // 注册公告路由
+  await app.register(noticeRoutes, { prefix: "/api/notices" });
   return app;
 }

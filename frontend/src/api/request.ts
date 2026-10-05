@@ -82,7 +82,8 @@ async function unwrap<T>(
   return body.data;
 }
 
-// 对外暴露的请求方法，泛型T就是业务数据的类型，调用处拿到的就是T
+// 命名导出：对外暴露的请求方法，泛型T就是业务数据的类型，调用处拿到的就是T
+// 导入时必须用{ request }包裹
 export const request = {
   get<T>(url: string, conifg?: AxiosRequestConfig): Promise<T> {
     return unwrap<T>(instance.get(url, conifg));
@@ -113,4 +114,4 @@ export const request = {
   },
 };
 
-export default instance;
+export default instance; //这是默认导出，可以改名，可以不用{}包裹

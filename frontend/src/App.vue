@@ -16,7 +16,7 @@
 import { ref } from "vue";
 import { ElMessage } from "element-plus";
 
-import request from "./api/request";
+import instance from "./api/request";
 
 interface HealthData {
   status: string;
@@ -28,7 +28,7 @@ const health = ref<HealthData | null>(null);
 
 async function checkBackend() {
   try {
-    const res = await request.get<
+    const res = await instance.get<
       unknown,
       { success: boolean; data: HealthData }
     >("/health");

@@ -81,7 +81,7 @@
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { ElMessage, type FormInstance, type FormRules } from "element-plus";
-import request from "@/api/request";
+import { request } from "@/api/request";
 import type { RegisterPayload } from "@/types";
 
 interface RegisterForm extends RegisterPayload {
