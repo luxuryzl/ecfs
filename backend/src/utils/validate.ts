@@ -7,6 +7,12 @@
 
 import { z } from "zod";
 import { ValidationError } from "./errors.js";
+import type { ZodSchema } from "zod/v3";
+
+// 添加1个id参数schema
+export const idSchema = z.object({
+  id: z.coerce.number().int().positive("ID 必须为正整数"),
+});
 
 // 第一个参数是 Zod 定义的校验规则（Schema）。z.ZodType<T> 表示这个 schema 校验通过后产生的数据类型是 T
 // 第二个参数是待校验的数据。使用 unknown 类型是因为来自 HTTP 请求体、表单或外部 API 的数据在编译期是未知的，必须经过运行时校验才能信任
@@ -44,4 +50,9 @@ export function parseParams<T>(schema: z.ZodType<T>, params: unknown): T {
     );
   }
   return result.data;
+}
+
+// 添加一个辅助解析id的函数
+export function parseId(params: unknown): number {
+  return parseParams(idSchema, params).id;
 }

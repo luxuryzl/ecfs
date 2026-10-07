@@ -1,17 +1,37 @@
 import "dotenv/config";
 import { buildApp, prisma } from "./app.js";
+import { env } from "./utils/env.js";
 
 const app = await buildApp();
 
+let isShuttingDown = false;
+
 async function shutdown(signal: string) {
-  app.log.info(`收到 ${signal}, 正在关闭...`);
+  if (isShuttingDown) return;
+  isShuttingDown = true;
+
+  app.log.info(`收到 ${signal}, 开始优雅关闭...`);
+  // 5秒超时强制退出
+  const forceExit = setTimeout(() => {
+    app.log.error("关闭超时，强制退出");
+    process.exit(1);
+  }, 5000);
+
   try {
+    // 1.停止接收新请求
     await app.close();
+    app.log.info("HTTP服务已关闭，停止接收新请求");
+    // 2.关闭数据库连接
     await prisma.$disconnect();
-    app.log.info("已关闭");
+    app.log.info("数据库连接已关闭");
+
+    clearTimeout(forceExit);
+    app.log.info("...优雅关闭完成");
+
     process.exit(0);
   } catch (err) {
     app.log.error({ err }, "关闭失败");
+    clearTimeout(forceExit);
     process.exit(1);
   }
 }
@@ -31,10 +51,21 @@ process.on("SIGINT", () => shutdown("SIGINT"));
  */
 process.on("SIGTERM", () => shutdown("SIGTERM"));
 
-const port = Number(process.env.PORT) || 3000;
+// 未捕获的异常
+process.on("uncaughtException", (err) => {
+  app.log.fatal({ err }, "未捕获的异常");
+  shutdown("uncaughtException");
+});
+
+process.on("unhandledRejection", (reason) => {
+  app.log.fatal({ reason }, "未处理的 Promise 拒绝");
+  shutdown("unhandledRejection");
+});
+
+const port = env.PORT;
 
 try {
-  await app.listen({ port, host: "localhost" });
+  await app.listen({ port, host: "0.0.0.0" });
   console.log(`Server is running at http://localhost:${port}`);
 } catch (err) {
   console.error("Error starting server:", err);

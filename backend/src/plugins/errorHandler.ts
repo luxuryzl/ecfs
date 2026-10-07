@@ -23,6 +23,13 @@ export default fp(async function errorHandlerPlugin(app: FastifyInstance) {
 
       //业务错误
       if (error instanceof AppError) {
+        // 4XX用warn，5XX用error
+        const logMethod = error.statusCode >= 500 ? "error" : "warn";
+        request.log[logMethod](
+          { err: error, reqId: request.id },
+          `${error.statusCode} ${error.message}`,
+        );
+
         return reply.code(error.statusCode).send({
           success: false,
           message: error.message,
@@ -40,10 +47,17 @@ export default fp(async function errorHandlerPlugin(app: FastifyInstance) {
       }
 
       // 未知错误
-      request.log.error({ err: error }, "未处理的服务端错误，Unhandled error");
+      request.log.error(
+        { err: error, reqId: request.id, stack: error.stack },
+        "未处理的服务端错误，Unhandled error",
+      );
+
       return reply.code(500).send({
         success: false,
-        message: "服务器内部错误",
+        message:
+          process.env.NODE_ENV === "production"
+            ? "服务器内部错误"
+            : error.message, // 生产环境只返回服务器内部错误，开发环境返回原始错误信息
         code: "INTERNAL_SERVER_ERROR",
       });
     },

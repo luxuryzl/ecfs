@@ -4,6 +4,7 @@ import { hashPassword, verifyPassword, authHook } from "../utils/auth.js";
 import { parseBody } from "../utils/validate.js";
 import { ok } from "../utils/response.js";
 import { AppError } from "../utils/errors.js";
+import rateLimit from "@fastify/rate-limit";
 
 const registerSchema = z.object({
   username: z
@@ -61,50 +62,62 @@ export async function authRoutes(app: FastifyInstance) {
   });
 
   // 登录
-  app.post("/login", async (req, reply) => {
-    const data = parseBody(loginSchema, req.body);
-
-    const user = await app.prisma.user.findUnique({
-      where: { username: data.username },
-      select: {
-        id: true,
-        username: true,
-        password: true,
-        role: true,
-        status: true,
-        balance: true,
-        nickname: true,
+  app.post(
+    "/login",
+    {
+      config: {
+        rateLimit: {
+          max: 10,
+          timeWindow: "15 minute",
+          keyGenerator: (req) => req.ip,
+        },
       },
-    });
-    if (!user)
-      throw new AppError(400, "用户名或密码错误", "INVALID_CREDENTIALS");
-    if (user.status === "DISABLED")
-      throw new AppError(403, "账号已被禁用", "ACCOUNT_DISABLED");
+    },
+    async (req, reply) => {
+      const data = parseBody(loginSchema, req.body);
 
-    const valid = await verifyPassword(data.password, user.password);
-    if (!valid)
-      throw new AppError(400, "用户名或密码错误", "INVALID_CREDENTIALS");
+      const user = await app.prisma.user.findUnique({
+        where: { username: data.username },
+        select: {
+          id: true,
+          username: true,
+          password: true,
+          role: true,
+          status: true,
+          balance: true,
+          nickname: true,
+        },
+      });
+      if (!user)
+        throw new AppError(400, "用户名或密码错误", "INVALID_CREDENTIALS");
+      if (user.status === "DISABLED")
+        throw new AppError(403, "账号已被禁用", "ACCOUNT_DISABLED");
 
-    const token = app.jwt.sign(
-      {
-        id: user.id,
-        username: user.username,
-        role: user.role as "USER" | "ADMIN",
-      },
-      { expiresIn: "7d" },
-    );
+      const valid = await verifyPassword(data.password, user.password);
+      if (!valid)
+        throw new AppError(400, "用户名或密码错误", "INVALID_CREDENTIALS");
 
-    return ok(reply, {
-      token,
-      user: {
-        id: user.id,
-        username: user.username,
-        nickname: user.nickname,
-        role: user.role,
-        balance: user.balance,
-      },
-    });
-  });
+      const token = app.jwt.sign(
+        {
+          id: user.id,
+          username: user.username,
+          role: user.role as "USER" | "ADMIN",
+        },
+        { expiresIn: "7d" },
+      );
+
+      return ok(reply, {
+        token,
+        user: {
+          id: user.id,
+          username: user.username,
+          nickname: user.nickname,
+          role: user.role,
+          balance: user.balance,
+        },
+      });
+    },
+  );
 
   // 获取当前登录用户信息
   app.get("/me", { preHandler: authHook }, async (req, reply) => {

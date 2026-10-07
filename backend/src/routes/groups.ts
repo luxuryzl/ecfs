@@ -3,7 +3,7 @@ import z from "zod";
 import { adminHook, authHook } from "../utils/auth.js";
 import { ok } from "../utils/response.js";
 import { AppError, NotFoundError } from "../utils/errors.js";
-import { parseBody } from "../utils/validate.js";
+import { parseBody, parseId } from "../utils/validate.js";
 import { logOperation } from "../utils/operationLog.js";
 
 const createSchema = z.object({
@@ -38,7 +38,9 @@ export async function groupRoutes(app: FastifyInstance) {
 
   // 详情
   app.get("/:id", { preHandler: authHook }, async (request, reply) => {
-    const id = Number((request.params as { id: string }).id);
+    // const id = Number((request.params as { id: string }).id);
+    // const { id } = parseParams(idSchema, request.params);
+    const id = parseId(request.params);
     const group = await app.prisma.group.findUnique({
       where: { id },
       include: { products: true },

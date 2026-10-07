@@ -7,6 +7,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { PrismaClient } from "./generated/prisma/client.js";
 import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import helmet from "@fastify/helmet";
+import rateLimit from "@fastify/rate-limit";
 
 import { env } from "./utils/env.js";
 import errorHandlerPlugin from "./plugins/errorHandler.js";
@@ -56,7 +58,13 @@ export async function buildApp(): Promise<FastifyInstance> {
             }, //避免日志中的中文乱码
           },
         }
-      : { level: "info" };
+      : {
+          level: "info",
+          transport: {
+            target: "pino/file",
+            options: { destination: "./logs/app.log", mkdir: true },
+          },
+        };
 
   const app = Fastify({
     logger: loggerConfig,
@@ -68,15 +76,31 @@ export async function buildApp(): Promise<FastifyInstance> {
   });
 
   // 插件
+  // 1.请求上下文（最先，因为要给所有请求加 reqId）
   await app.register(requestContextPlugin);
+  // 2.错误处理（要在业务路由前，否则捕获不到）
   await app.register(errorHandlerPlugin);
-  await app.register(cors, { origin: true, exposedHeaders: ["x-request-id"] });
+  // 3.cors
+  await app.register(cors, {
+    origin: env.NODE_ENV === "production" ? ["https://your-domain.com"] : true,
+    exposedHeaders: ["x-request-id"],
+  });
+  // 安全头：helmet 放 cors 之后、jwt 之前
+  await app.register(helmet, { contentSecurityPolicy: false }); //对纯 API 后端，关掉 CSP 是标准做法
+  // 限流：每个IP每15分钟最多访问100次
+  await app.register(rateLimit, {
+    max: 100,
+    timeWindow: "15 minutes",
+  });
+  // 4.jwt
   await app.register(jwt, { secret: env.JWT_SECRET });
+  // 5.multipart
   await app.register(multipart, {
     limits: {
       fileSize: 5 * 1024 * 1024, // 限制上传文件大小为5MB
     },
   });
+  // 6.静态服务
   await app.register(fastifyStatic, {
     root: path.join(__dirname, "../uploads"),
     prefix: "/uploads/",

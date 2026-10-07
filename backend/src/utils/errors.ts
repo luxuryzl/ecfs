@@ -13,6 +13,7 @@ export class AppError extends Error {
   ) {
     super(message); //调用父类 Error 的构造函数，把 message 传给内置的错误消息机制，这样 error.message 就能正常使用
     this.name = "AppError"; //设置错误名称，覆盖默认的 "Error"，这样在日志或调试时能一眼看出错误类型
+    Error.captureStackTrace(this, this.constructor);
   }
 }
 
@@ -40,5 +41,12 @@ export class NotFoundError extends AppError {
 export class ValidationError extends AppError {
   constructor(message: string) {
     super(400, message, "VALIDATION_ERROR");
+  }
+}
+
+// 5XX 服务端错误
+export class InternalError extends AppError {
+  constructor(message = "服务器内部错误") {
+    super(500, message, "INTERNAL_ERROR");
   }
 }
