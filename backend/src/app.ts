@@ -25,6 +25,7 @@ import { withdrawRoutes } from "./routes/withdraw.js";
 import { userRoutes } from "./routes/users.js";
 import { noticeRoutes } from "./routes/notices.js";
 import { dashboardRoutes } from "./routes/dashboard.js";
+import { uploadRoutes } from "./routes/upload.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -113,5 +114,7 @@ export async function buildApp(): Promise<FastifyInstance> {
   await app.register(noticeRoutes, { prefix: "/api/notices" });
   // 注册图表路由
   await app.register(dashboardRoutes, { prefix: "/api/dashboard" });
+  // 注册上传路由
+  await app.register(uploadRoutes, { prefix: "/api/upload" });
   return app;
 }

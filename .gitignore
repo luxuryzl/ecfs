@@ -53,3 +53,7 @@ Thumbs.db
 
 # 根目录可能产生的临时文件
 *.tmp
+
+# 上传文件
+uploads/*
+!uploads/.gitkeep

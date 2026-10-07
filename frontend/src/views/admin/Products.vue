@@ -190,16 +190,20 @@
           </el-select>
         </el-form-item>
         <el-form-item label="图片" prop="image">
-          <el-input
-            v-model="form.image"
-            placeholder="选填，图片 URL（阶段 18 会改成上传）"
-          />
-          <div v-if="form.image" class="preview">
-            <el-image
-              :src="form.image"
-              fit="cover"
-              style="width: 80px; height: 80px"
-            />
+          <el-upload
+            class="image-uploader"
+            :show-file-list="false"
+            :before-upload="beforeUpload"
+            :http-request="handleUpload"
+            accept="image/*"
+          >
+            <img v-if="form.image" :src="form.image" class="uploaded-image" />
+            <el-icon v-else class="uploader-icon"><Plus /></el-icon>
+          </el-upload>
+          <div v-if="form.image" class="image-actions">
+            <el-button link type="danger" size="small" @click="form.image = ''">
+              移除图片
+            </el-button>
           </div>
         </el-form-item>
         <el-form-item prop="status">
@@ -233,6 +237,8 @@ import {
 import { Plus, Search, Refresh } from "@element-plus/icons-vue";
 import * as productApi from "@/api/product";
 import * as groupApi from "@/api/group";
+import * as uploadApi from "@/api/upload";
+import type { UploadRawFile, UploadRequestOptions } from "element-plus";
 
 const loading = ref(false);
 const submitting = ref(false);
@@ -361,6 +367,30 @@ function resetForm() {
   editingId.value = null;
 }
 
+// 上传前校验
+function beforeUpload(file: UploadRawFile) {
+  const isImage = file.type.startsWith("image/");
+  if (!isImage) {
+    ElMessage.error("请上传图片");
+    return false;
+  }
+  const isLt5M = file.size / 1024 / 1024 < 5;
+  if (!isLt5M) {
+    ElMessage.error("图片大小不能超过5MB");
+    return false;
+  }
+
+  return true;
+}
+
+// 自定义上传
+async function handleUpload(options: UploadRequestOptions) {
+  const result = await uploadApi.uploadImage(options.file);
+  form.image = result.url;
+  ElMessage.success("上传成功");
+  return result;
+}
+
 async function handleSubmit() {
   if (!formRef.value) return;
 
@@ -482,6 +512,40 @@ onMounted(() => {
 }
 
 .preview {
+  margin-top: 8px;
+}
+
+.image-uploader :deep(.el-upload) {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-uploader :deep(.el-upload:hover) {
+  border-color: #409eff;
+}
+
+.uploaded-image {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  display: block;
+}
+
+.uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+}
+
+.image-actions {
   margin-top: 8px;
 }
 </style>
