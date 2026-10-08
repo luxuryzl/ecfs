@@ -7,6 +7,7 @@ import axios, {
 } from "axios";
 import { ElMessage } from "element-plus";
 import type { ApiResponse } from "@/types";
+import axiosRetry from "axios-retry";
 
 // 创建axios实例
 const instance: AxiosInstance = axios.create({
@@ -113,5 +114,19 @@ export const request = {
     return unwrap<T>(instance.patch(url, data, config));
   },
 };
+
+// 添加失败重试
+axiosRetry(instance, {
+  retries: 3,
+  retryDelay: axiosRetry.exponentialDelay,
+  retryCondition: (error) => {
+    return (
+      axiosRetry.isNetworkError(error) ||
+      (error.response?.status !== undefined &&
+        error.response?.status >= 500 &&
+        error.config?.method?.toUpperCase() === "GET")
+    );
+  },
+});
 
 export default instance; //这是默认导出，可以改名，可以不用{}包裹

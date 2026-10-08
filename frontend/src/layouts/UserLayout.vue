@@ -42,7 +42,9 @@
       </el-header>
 
       <el-main class="main">
-        <router-view />
+        <ErrorBoundary>
+          <router-view />
+        </ErrorBoundary>
       </el-main>
     </el-container>
   </el-container>
@@ -52,6 +54,7 @@
 import { useRouter, useRoute } from "vue-router";
 import { useUserStore } from "@/stores/user";
 import { computed } from "vue";
+import ErrorBoundary from "@/components/ErrorBoundary.vue";
 
 const router = useRouter();
 const route = useRoute();

@@ -304,6 +304,9 @@ function goToWithdraws() {
 }
 
 onMounted(loadStats);
+/* onMounted(() => {
+  throw new Error("加载数据失败");
+}); */
 </script>
 
 <style scoped>

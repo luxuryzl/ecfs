@@ -2,8 +2,17 @@ import type { FastifyInstance } from "fastify";
 import { adminHook } from "../utils/auth.js";
 import { ok } from "../utils/response.js";
 
+// 临时，用于测试慢路由日志
+function sleep(ms: number) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
 export async function dashboardRoutes(app: FastifyInstance) {
   app.get("/stats", { preHandler: adminHook }, async (request, reply) => {
+    // 模拟2秒的延迟
+    // await sleep(2000);
+
     const [
       userCount,
       productCount,
